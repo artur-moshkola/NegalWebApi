@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.IO;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,82 +14,50 @@ namespace NegalWebApi.Controllers
 	[Route("[controller]")]
 	public class PlasmaAPIController : ControllerBase
 	{
-		[HttpPost]
-		public IActionResult GetServerTime()
+		private async ValueTask<IActionResult> Debug(string method, Func<string, string> transform = null)
 		{
-			throw new NotImplementedException();
+			try
+			{
+				using (var fl1 = System.IO.File.OpenWrite($"Logs/{DateTime.Now:yyyy-MM-dd_HH-mm-ss-fff}_{method}_Request.json"))
+				{
+					await Request.BodyReader.CopyToAsync(fl1);
+				}
+				string resp;
+				var rname = $"Data/{method}.json";
+				if (!System.IO.File.Exists(rname)) rname = $"Data/Default.json";
+				using (var fd = System.IO.File.OpenRead(rname))
+				{
+					using var sr = new StreamReader(fd);
+					resp = await sr.ReadToEndAsync();
+				}
+
+				if (transform != null)
+					resp = transform(resp);
+
+				using (var fl2 = System.IO.File.OpenWrite($"Logs/{DateTime.Now:yyyy-MM-dd_HH-mm-ss-fff}_{method}_Response.json"))
+				{
+					using var sw = new StreamWriter(fl2);
+					await sw.WriteAsync(resp);
+				}
+
+				return Content(resp, "application/json");
+			}
+			catch (Exception e)
+			{
+				using var fle = System.IO.File.OpenWrite($"Logs/{DateTime.Now:yyyy-MM-dd_HH-mm-ss-fff}_{method}_Exception.log");
+				using var sw = new StreamWriter(fle);
+				await sw.WriteAsync(e.ToString());
+				throw;
+			}
 		}
 
-		[HttpPost]
-		public IActionResult GetOperatorInfo()
-		{
-			throw new NotImplementedException();
-		}
+		private static readonly Regex rg = new(@"\{(\{[^\}]*\})\}", RegexOptions.Compiled);
 
 		[HttpPost]
-		public IActionResult GetOperatorPhoto()
+		[Route("{method}")]
+		public ValueTask<IActionResult> Wildcard(string method)
 		{
-			throw new NotImplementedException();
-		}
-
-		[HttpPost]
-		public IActionResult GetDonorsInfo()
-		{
-			throw new NotImplementedException();
-		}
-
-		[HttpPost]
-		public IActionResult GetDonorsPhoto()
-		{
-			throw new NotImplementedException();
-		}
-
-		[HttpPost]
-		public IActionResult GetEquipments()
-		{
-			throw new NotImplementedException();
-		}
-
-		[HttpPost]
-		public IActionResult GetSodiumChlorides()
-		{
-			throw new NotImplementedException();
-		}
-
-		[HttpPost]
-		public IActionResult GetAnticoagulants()
-		{
-			throw new NotImplementedException();
-		}
-
-		[HttpPost]
-		public IActionResult SavePlasmaCollection()
-		{
-			throw new NotImplementedException();
-		}
-
-		[HttpPost]
-		public IActionResult SaveException()
-		{
-			throw new NotImplementedException();
-		}
-
-		[HttpPost]
-		public IActionResult GetPlasmaParmas()
-		{
-			throw new NotImplementedException();
-		}
-
-		[HttpPost]
-		public IActionResult UploadPlasmaParams()
-		{
-			throw new NotImplementedException();
-		}
-
-		[HttpPost]
-		public IActionResult UploadPlasmaComment()
-		{
-			throw new NotImplementedException();
+			return Debug(method, s => rg.Replace(s, new MatchEvaluator(m => String.Format(m.Groups[1].Value, DateTime.Now))));
 		}
 	}
 }

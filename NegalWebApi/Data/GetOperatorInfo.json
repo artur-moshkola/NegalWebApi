@@ -1,0 +1,12 @@
+{
+  "code": "success",
+  "result": [
+    {
+      "userName": "777",
+      "realName": "Uma Thurman",
+      "sex": "W",
+      "phone": "+15551234567",
+      "deptName": "Hollywood"
+    }
+  ]
+}

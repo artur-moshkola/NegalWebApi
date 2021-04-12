@@ -1,0 +1,6 @@
+{
+  "code": "success",
+  "result": {
+    "serverTime": "{{0:yyyyMMddHHmmssf}}"
+  }
+}

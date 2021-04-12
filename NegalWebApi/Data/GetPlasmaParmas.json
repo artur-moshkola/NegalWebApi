@@ -1,0 +1,13 @@
+{
+  "code": "success",
+  "result": {
+    "oneWayWeight": "Oneway weight",
+    "totalWeight": "Total blood processed volume",
+    "knjProps": "Anticoagulant proportion",
+    "bysWeight": "Saline supplement weight",
+    "XDYL": "Cuff pressure",
+    "ZLCZ": "Total difference",
+    "collectSpeed": "Collecting speed",
+    "hsSpeed": " Return speed",
+  }
+}

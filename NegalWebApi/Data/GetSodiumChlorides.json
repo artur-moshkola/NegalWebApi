@@ -1,0 +1,11 @@
+{
+  "code": "success",
+  "result": [
+    {
+      "code": "999",
+      "name": "Sodium",
+      "company": "Manufacturer Sodium",
+      "batchNo": "Batch S"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "code": "success",
+  "result": [
+    {
+      "donorNo": "555",
+      "donorName": "John Travolta",
+      "sex": "M",
+      "bloodType": "A Rh+",
+      "createdDate": "201506080000000",
+      "idCard": "1234567890",
+      "processNo": "888",
+      "changeless": "Y",
+      "remark": "Remarks",
+      "collectTip": "plasma separation tip, with <br/> as the newline identifier for output content",
+      "address": "ID address",
+      "phone": "Tel",
+      "age": "42",
+      "lastPlasmaDate": "202101080000000",
+      "plasmaCountByYear": "3",
+      "isMy": "N",
+      "plasmaAge": "2"
+    }
+  ]
+}
