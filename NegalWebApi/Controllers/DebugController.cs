@@ -11,8 +11,7 @@ using System.Threading.Tasks;
 namespace NegalWebApi.Controllers
 {
 	[ApiController]
-	[Route("[controller]")]
-	public class PlasmaAPIController : ControllerBase
+	public class DebugController : ControllerBase
 	{
 		private async ValueTask<IActionResult> Debug(string method, Func<string, string> transform = null)
 		{
@@ -54,10 +53,10 @@ namespace NegalWebApi.Controllers
 		private static readonly Regex rg = new(@"\{(\{[^\}]*\})\}", RegexOptions.Compiled);
 
 		[HttpPost]
-		[Route("{method}")]
-		public ValueTask<IActionResult> Wildcard(string method)
+		[Route("{*url}")]
+		public ValueTask<IActionResult> Wildcard(string url)
 		{
-			return Debug(method, s => rg.Replace(s, new MatchEvaluator(m => String.Format(m.Groups[1].Value, DateTime.Now))));
+			return Debug(url.Replace('/','-'), s => rg.Replace(s, new MatchEvaluator(m => String.Format(m.Groups[1].Value, DateTime.Now))));
 		}
 	}
 }
