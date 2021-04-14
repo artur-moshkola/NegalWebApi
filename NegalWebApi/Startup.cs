@@ -26,6 +26,7 @@ namespace NegalWebApi
 		{
 
 			services.AddControllers();
+			services.AddLogging(logging => logging.AddConsole());
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
