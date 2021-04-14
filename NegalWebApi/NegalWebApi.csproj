@@ -5,7 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Logs\" />
+    <Compile Remove="Dumps\**" />
+    <Compile Remove="Logs\**" />
+    <Content Remove="Dumps\**" />
+    <Content Remove="Logs\**" />
+    <EmbeddedResource Remove="Dumps\**" />
+    <EmbeddedResource Remove="Logs\**" />
+    <None Remove="Dumps\**" />
+    <None Remove="Logs\**" />
   </ItemGroup>
 
 </Project>

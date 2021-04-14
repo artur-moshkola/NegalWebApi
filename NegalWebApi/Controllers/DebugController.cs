@@ -30,13 +30,13 @@ namespace NegalWebApi.Controllers
 				if (String.Equals("plasmaApi", up[^2], StringComparison.InvariantCultureIgnoreCase)) dtid = up[^1];
 				logger.LogInformation($"Called method: {url}.");
 				method = String.Join('-', up);
-				using (var fl1 = System.IO.File.OpenWrite($"Logs/{DateTime.Now:yyyy-MM-dd_HH-mm-ss-fff}_{method}_Request.json"))
-				{
-					await Request.BodyReader.CopyToAsync(fl1);
-				}
-				string resp = null;
 				if (!String.IsNullOrEmpty(dtid))
 				{
+					using (var fl1 = System.IO.File.OpenWrite($"Dumps/{DateTime.Now:yyyy-MM-dd_HH-mm-ss-fff}_{method}_Request.json"))
+					{
+						await Request.BodyReader.CopyToAsync(fl1);
+					}
+					string resp;
 					var rname = $"Data/{dtid}.json";
 					if (!System.IO.File.Exists(rname)) rname = $"Data/Default.json";
 					using (var fd = System.IO.File.OpenRead(rname))
@@ -47,11 +47,8 @@ namespace NegalWebApi.Controllers
 
 					if (transform != null)
 						resp = transform(resp);
-				}
 
-				if (resp != null)
-				{
-					using (var fl2 = System.IO.File.OpenWrite($"Logs/{DateTime.Now:yyyy-MM-dd_HH-mm-ss-fff}_{method}_Response.json"))
+					using (var fl2 = System.IO.File.OpenWrite($"Dumps/{DateTime.Now:yyyy-MM-dd_HH-mm-ss-fff}_{method}_Response.json"))
 					{
 						using var sw = new StreamWriter(fl2);
 						await sw.WriteAsync(resp);
@@ -59,7 +56,12 @@ namespace NegalWebApi.Controllers
 					return Content(resp, "application/json");
 				}
 
-				throw new Exception("Bad api path");
+				using (var fl1 = System.IO.File.OpenWrite($"Logs/{DateTime.Now:yyyy-MM-dd_HH-mm-ss-fff}_{method}_Request.json"))
+				{
+					await Request.BodyReader.CopyToAsync(fl1);
+				}
+
+				return NotFound();
 			}
 			catch (Exception e)
 			{
