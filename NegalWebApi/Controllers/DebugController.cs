@@ -7,6 +7,8 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace NegalWebApi.Controllers
 {
@@ -14,9 +16,11 @@ namespace NegalWebApi.Controllers
 	public class DebugController : ControllerBase
 	{
 		private readonly ILogger logger;
+		private readonly HttpClient http;
 
-		public DebugController(ILogger<DebugController> logger)
+		public DebugController(HttpClient http, ILogger<DebugController> logger)
 		{
+			this.http = http;
 			this.logger = logger;
 		}
 
@@ -56,12 +60,41 @@ namespace NegalWebApi.Controllers
 					return Content(resp, "application/json");
 				}
 
+				using var msrq = new MemoryStream();
+				await Request.BodyReader.CopyToAsync(msrq);
 				using (var fl1 = System.IO.File.OpenWrite($"Logs/{DateTime.Now:yyyy-MM-dd_HH-mm-ss-fff}_{method}_Request.json"))
 				{
-					await Request.BodyReader.CopyToAsync(fl1);
+					await msrq.CopyToAsync(fl1);
 				}
+				
+				using var cnt = new StreamContent(msrq);
+				cnt.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+				using var presp = await http.PostAsync("http://localhost:9191/" + url, cnt);
+				if (presp.IsSuccessStatusCode)
+				{
+					string rsp;
+					using (var msrs = new MemoryStream()) {
+						await presp.Content.CopyToAsync(msrs);
+						rsp = Encoding.UTF8.GetString(msrs.GetBuffer());
+					}
 
-				return NotFound();
+					using (var fl2 = System.IO.File.OpenWrite($"Logs/{DateTime.Now:yyyy-MM-dd_HH-mm-ss-fff}_{method}_Response.json"))
+					{
+						using var sw = new StreamWriter(fl2);
+						await sw.WriteAsync(rsp);
+					}
+					return Content(rsp, "application/json");
+				}
+				else
+				{
+					var rsc = (int)presp.StatusCode;
+					using (var fl2 = System.IO.File.OpenWrite($"Logs/{DateTime.Now:yyyy-MM-dd_HH-mm-ss-fff}_{method}_Response.json"))
+					{
+						using var sw = new StreamWriter(fl2);
+						await sw.WriteAsync($"Status code: {rsc}");
+					}
+					return StatusCode(rsc);
+				}
 			}
 			catch (Exception e)
 			{

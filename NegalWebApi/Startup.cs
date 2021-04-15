@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace NegalWebApi
@@ -27,6 +28,7 @@ namespace NegalWebApi
 
 			services.AddControllers();
 			services.AddLogging(logging => logging.AddConsole());
+			services.AddSingleton(s => new HttpClient());
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
