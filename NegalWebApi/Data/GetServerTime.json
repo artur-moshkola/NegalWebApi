@@ -1,6 +1,7 @@
 {
-  "code": "success",
-  "result": {
-    "serverTime": "{{0:yyyyMMddHHmmssf}}"
-  }
+    "code": "success",
+    "msg": "Requst succeed",
+    "result": {
+        "serverTime": "{{0:yyyyMMddHHmmssf}}"
+    }
 }

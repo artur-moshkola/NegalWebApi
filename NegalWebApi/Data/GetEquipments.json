@@ -1,17 +1,18 @@
 {
-  "code": "success",
-  "result": [
-    {
-      "code": "333",
-      "name": "Гемакон 3",
-      "company": "Китайцы",
-      "batchNo": "3"
-    },
-    {
-      "code": "332",
-      "name": "Гемакон 2",
-      "company": "Китайцы",
-      "batchNo": "4"
-    }
-  ]
+    "code": "success",
+    "msg": "Requst succeed",
+    "result": [
+        {
+            "code": "333",
+            "name": "Гемакон 3",
+            "company": "Китайцы",
+            "batchNo": "3"
+        },
+        {
+            "code": "332",
+            "name": "Гемакон 2",
+            "company": "Китайцы",
+            "batchNo": "4"
+        }
+    ]
 }

@@ -1,11 +1,12 @@
 {
-  "code": "success",
-  "result": [
-    {
-      "code": "11111111",
-      "name": "Anticoagulant 111",
-      "company": "Manufacturer 111",
-      "batchNo": "Batch 111"
-    }
-  ]
+    "code": "success",
+    "msg": "Requst succeed",
+    "result": [
+        {
+            "code": "11111111",
+            "name": "Anticoagulant 111",
+            "company": "Manufacturer 111",
+            "batchNo": "Batch 111"
+        }
+    ]
 }

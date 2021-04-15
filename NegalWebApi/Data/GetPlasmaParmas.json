@@ -1,13 +1,14 @@
 {
-  "code": "success",
-  "result": {
-    "oneWayWeight": "Oneway weight",
-    "totalWeight": "Total blood processed volume",
-    "knjProps": "Anticoagulant proportion",
-    "bysWeight": "Saline supplement weight",
-    "XDYL": "Cuff pressure",
-    "ZLCZ": "Total difference",
-    "collectSpeed": "Collecting speed",
-    "hsSpeed": " Return speed",
-  }
+    "code": "success",
+    "msg": "Requst succeed",
+    "result": {
+        "oneWayWeight": "200",
+        "totalWeight": "480",
+        "knjProps": "1:16",
+        "bysWeight": "0",
+        "XDYL": "50",
+        "ZLCZ": "10",
+        "collectSpeed": "100",
+        "hsSpeed": " 100"
+    }
 }

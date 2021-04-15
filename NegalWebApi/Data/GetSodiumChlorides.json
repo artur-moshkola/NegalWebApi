@@ -1,11 +1,12 @@
 {
-  "code": "success",
-  "result": [
-    {
-      "code": "999",
-      "name": "Sodium",
-      "company": "Manufacturer Sodium",
-      "batchNo": "Batch S"
-    }
-  ]
+    "code": "success",
+    "msg": "Requst succeed",
+    "result": [
+        {
+            "code": "999",
+            "name": "Sodium",
+            "company": "Manufacturer Sodium",
+            "batchNo": "Batch S"
+        }
+    ]
 }
