@@ -32,6 +32,7 @@ namespace NegalWebApi.Controllers
 		private async ValueTask Debug(string url, Func<string, string> transform = null)
 		{
 			var method = String.Empty;
+			var rqts = DateTime.Now;
 			try
 			{
 				var dtid = String.Empty;
@@ -41,7 +42,7 @@ namespace NegalWebApi.Controllers
 				method = String.Join('-', up);
 				if (!String.IsNullOrEmpty(dtid))
 				{
-					using (var fl1 = System.IO.File.OpenWrite($"Dumps/{DateTime.Now:yyyy-MM-dd_HH-mm-ss-fff}_{method}_Request.json"))
+					using (var fl1 = System.IO.File.OpenWrite($"Dumps/{rqts:yyyy-MM-dd_HH-mm-ss-fff}_{method}_Request.json"))
 					{
 						await Request.Body.CopyToAsync(fl1).ConfigureAwait(false);
 					}
@@ -57,7 +58,7 @@ namespace NegalWebApi.Controllers
 					if (transform != null)
 						resp = transform(resp);
 
-					using (var fl2 = System.IO.File.OpenWrite($"Dumps/{DateTime.Now:yyyy-MM-dd_HH-mm-ss-fff}_{method}_Response.json"))
+					using (var fl2 = System.IO.File.OpenWrite($"Dumps/{rqts:yyyy-MM-dd_HH-mm-ss-fff}_{method}_Response.json"))
 					{
 						using var sw = new StreamWriter(fl2);
 						await sw.WriteAsync(resp).ConfigureAwait(false);
@@ -69,7 +70,7 @@ namespace NegalWebApi.Controllers
 				}
 				else
 				{
-					using (var fl2 = System.IO.File.OpenWrite($"Dumps/{DateTime.Now:yyyy-MM-dd_HH-mm-ss-fff}_{method}_Response_404.json"))
+					using (var fl2 = System.IO.File.OpenWrite($"Dumps/{rqts:yyyy-MM-dd_HH-mm-ss-fff}_{method}_Response_404_{DateTime.Now.Subtract(rqts).TotalMilliseconds}ms.json"))
 					{
 						
 					}
@@ -78,9 +79,11 @@ namespace NegalWebApi.Controllers
 			}
 			catch (Exception e)
 			{
-				using var fle = System.IO.File.OpenWrite($"Logs/{DateTime.Now:yyyy-MM-dd_HH-mm-ss-fff}_{method}_Exception.log");
-				using var sw = new StreamWriter(fle);
-				await sw.WriteAsync(e.ToString()).ConfigureAwait(false);
+				using (var fle = System.IO.File.OpenWrite($"Logs/{DateTime.Now:yyyy-MM-dd_HH-mm-ss-fff}_{method}_Exception_{DateTime.Now.Subtract(rqts).TotalMilliseconds}ms.log"))
+				{
+					using var sw = new StreamWriter(fle);
+					await sw.WriteAsync(e.ToString()).ConfigureAwait(false);
+				}
 				logger.LogError(e, "Unhandled Exception");
 				throw;
 			}
@@ -89,6 +92,7 @@ namespace NegalWebApi.Controllers
 		private async ValueTask Proxy(string url)
 		{
 			var method = String.Empty;
+			var rqts = DateTime.Now; 
 			try
 			{
 				logger.LogInformation($"Called method: {url}.");
@@ -101,7 +105,7 @@ namespace NegalWebApi.Controllers
 					{
 						await Request.BodyReader.CopyToAsync(rqms).ConfigureAwait(false);
 						rqms.Seek(0, SeekOrigin.Begin);
-						using (var fl1 = System.IO.File.OpenWrite($"Logs/{DateTime.Now:yyyy-MM-dd_HH-mm-ss-fff}_{method}_Request.json"))
+						using (var fl1 = System.IO.File.OpenWrite($"Logs/{rqts:yyyy-MM-dd_HH-mm-ss-fff}_{method}_Request.json"))
 						{
 							await rqms.CopyToAsync(fl1).ConfigureAwait(false);
 						}
@@ -122,7 +126,7 @@ namespace NegalWebApi.Controllers
 						rsms.Seek(0, SeekOrigin.Begin);
 					}
 
-					using (var fl2 = System.IO.File.OpenWrite($"Logs/{DateTime.Now:yyyy-MM-dd_HH-mm-ss-fff}_{method}_Response_{rcode}.json"))
+					using (var fl2 = System.IO.File.OpenWrite($"Logs/{rqts:yyyy-MM-dd_HH-mm-ss-fff}_{method}_Response_{rcode}_{DateTime.Now.Subtract(rqts).TotalMilliseconds}ms.json"))
 					{
 						await rsms.CopyToAsync(fl2).ConfigureAwait(false);
 					}
@@ -135,9 +139,11 @@ namespace NegalWebApi.Controllers
 			}
 			catch (Exception e)
 			{
-				using var fle = System.IO.File.OpenWrite($"Logs/{DateTime.Now:yyyy-MM-dd_HH-mm-ss-fff}_{method}_Exception.log");
-				using var sw = new StreamWriter(fle);
-				await sw.WriteAsync(e.ToString()).ConfigureAwait(false);
+				using (var fle = System.IO.File.OpenWrite($"Logs/{rqts:yyyy-MM-dd_HH-mm-ss-fff}_{method}_Exception_{DateTime.Now.Subtract(rqts).TotalMilliseconds}ms.log"))
+				{
+					using var sw = new StreamWriter(fle);
+					await sw.WriteAsync(e.ToString()).ConfigureAwait(false);
+				}
 				logger.LogError(e, "Unhandled Exception");
 				throw;
 			}
