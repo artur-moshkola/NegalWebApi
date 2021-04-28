@@ -2,13 +2,13 @@
     "code": "success",
     "msg": "Requst succeed",
     "result": {
-        "oneWayWeight": "200",
-        "totalWeight": "480",
+        "oneWayWeight": 200,
+        "totalWeight": 480,
         "knjProps": "1:16",
-        "bysWeight": "0",
-        "XDYL": "50",
-        "ZLCZ": "10",
-        "collectSpeed": "100",
-        "hsSpeed": " 100"
+        "bysWeight": 0,
+        "XDYL": 50,
+        "ZLCZ": 10,
+        "collectSpeed": 100,
+        "hsSpeed": 100
     }
 }

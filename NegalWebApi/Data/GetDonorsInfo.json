@@ -15,11 +15,11 @@
             "collectTip": "plasma separation tip, with <br/> as the newline identifier for output content",
             "address": "ID address",
             "phone": "Tel",
-            "age": "42",
+            "age": 42,
             "lastPlasmaDate": "202101080000000",
-            "plasmaCountByYear": "3",
+            "plasmaCountByYear": 3,
             "isMy": "N",
-            "plasmaAge": "2"
+            "plasmaAge": 2
         }
     ]
 }
