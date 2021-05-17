@@ -21,7 +21,7 @@ try {
             $params += New-Object System.Data.SqlClient.SqlParameter("@Package",$package)
             $params += New-Object System.Data.SqlClient.SqlParameter("@Name",$_.Name)
 
-            if ($_.Name -match '^([0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{3,8})_([^_]*)_([^\._]*)(?:_([0-9]+))?(?:_([0-9]+)ms)?\.(.*)$') {
+            if ($_.Name -match '^([0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{3,8})_([^_]*)_([^\._]*)(?:_([0-9]+))?(?:_([0-9]+)(?:[,\.0-9]*)?ms)?\.(.*)$') {
                 $params += New-Object System.Data.SqlClient.SqlParameter("@RequestId", $Matches[1])
                 $ts = [System.DateTime]::ParseExact($Matches[1], "yyyy-MM-dd_HH-mm-ss-fff", [System.Globalization.CultureInfo]::InvariantCulture)
                 $params += New-Object System.Data.SqlClient.SqlParameter("@TS", $ts)
